@@ -29,25 +29,27 @@ export default function App() {
 
   useEffect(() => {
     setStatus(Status.PENDING);
+    (async () => {
+      try {
+        const images = await imageApi({ searchQuery, page });
 
-    imageApi({ searchQuery, page })
-      .then(images => {
         if (images.length < 1) {
           toast.info('Nothing matched your search terms 😣');
           setError(true);
           setStatus(Status.REJECTED);
-        } else {
-          setImages(prevState => [...prevState, ...images]);
-          setStatus(Status.RESOLVED);
-          if (page !== 1) {
-            scrollToBottom();
-          }
+          return;
         }
-      })
-      .catch(error => {
+
+        setImages(prevState => [...prevState, ...images]);
+        setStatus(Status.RESOLVED);
+        if (page !== 1) {
+          scrollToBottom();
+        }
+      } catch (error) {
         setError(error);
         setStatus(Status.REJECTED);
-      });
+      }
+    })();
   }, [searchQuery, page]);
 
   const handleLoadMore = () => {

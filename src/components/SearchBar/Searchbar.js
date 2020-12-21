@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import s from './SearchBar.module.css';
 
 export default function Searchbar({ onSubmit }) {
@@ -13,7 +14,7 @@ export default function Searchbar({ onSubmit }) {
     event.preventDefault();
 
     if (query.trim() === '') {
-      alert('Enter what you are looking for.');
+      toast.info('Enter what you are looking for.');
       return;
     }
 
